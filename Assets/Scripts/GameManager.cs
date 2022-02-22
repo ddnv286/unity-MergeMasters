@@ -4,8 +4,6 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     public GameObject selectedUnit;
-    public int gridLength = 5;
-    public int gridHeight = 3;
     public Vector3[,] coordinates = new Vector3[5, 3];
     static float Y_POS = 1.14f;
 
@@ -50,14 +48,11 @@ public class GameManager : MonoBehaviour
                     }
                     selectedUnit = hit.collider.gameObject;
                     Cursor.visible = false;
-                    // Debug.Log("Hit " + hit.transform.gameObject.name);
-                    // hit.transform.gameObject.GetComponent<Renderer>().material.DOColor(Color.red, 1f);
-                    // SetPosition(hit.transform.gameObject, coordinates[4, 2]);
-                    // Debug.Log("Moved to " + coordinates[4, 2]);
                 }
             }
             else
             {
+                // calculate z position based on mouse position and camera points to unit's z position
                 Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(selectedUnit.transform.position).z);
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
                 selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, Y_POS, worldPosition.z);
@@ -67,14 +62,15 @@ public class GameManager : MonoBehaviour
         }
         if (selectedUnit != null)
         {
+            // calculate z position based on mouse position and camera points to unit's z position
             Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(selectedUnit.transform.position).z);
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
             selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, 1.3f, worldPosition.z);
         }
     }
 
-    void SetPosition(GameObject obj, Vector3 pos)
+    void SnapToGrid(GameObject unit, Vector3 position)
     {
-        obj.transform.DOMove(pos, 1f);
+        
     }
 }
