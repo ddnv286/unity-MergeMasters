@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
             for (int j = 0; j < gridHeight; j++) {
                 Vector3 worldPos = new Vector3(i, 0.77f, j);
                 Transform obj = Instantiate(prefabGridCell, worldPos, Quaternion.identity);
-                // TODO: offset world position
+                // TODO: fixing offset world position
                 obj.transform.position = new Vector3 (-2f + i, 0.77f, -2.5f + j);
                 obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 obj.name = "Cell" + i + j;
@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
                 // TODO: fixing 0.5f offset (0.5f offset is temporary for easier snapping to slot)
                 selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z)+0.5f);
+                CheckOverlapped(selectedUnit.GetComponent<Unit>());
                 selectedUnit = null;
                 Cursor.visible = true;
             }
@@ -66,5 +67,25 @@ public class GameManager : MonoBehaviour
 
     private void OnMouseOver () {
         // TODO: Drag unit to slot
+    }
+
+    private void OnMouseExit () {
+
+    }
+    
+    void CheckOverlapped (Unit unit) {
+        BoxCollider collider = unit.GetComponent<BoxCollider>();
+        Collider[] otherColliders = Physics.OverlapBox(unit.transform.position, transform.localScale/2, Quaternion.identity, LayerMask.GetMask("Unit"));
+        if (otherColliders.Length > 0) {
+            Debug.Log("Overlapped");
+            Merge(unit, otherColliders[0].GetComponent<Unit>());
+        }
+    }
+
+    private void Merge (Unit unit1, Unit unit2) {
+        // check if unit1 and unit2 are the same
+        if (unit1.gameObject.name == unit2.gameObject.name) {
+            unit1.gameObject.GetComponent<Material>().color = Color.yellow;            unit2.transform.DOScale(0f, .5f);
+        }
     }
 }
