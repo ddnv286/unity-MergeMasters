@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviour
                 // calculate z position based on mouse position and camera points to unit's z position
                 Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(selectedUnit.transform.position).z);
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
-                selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, Y_POS, worldPosition.z);
+                // TODO: fixing 0.5f offset (0.5f offset is temporary for easier snapping to slot)
+                selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z)+0.5f);
                 selectedUnit = null;
                 Cursor.visible = true;
             }
@@ -65,12 +66,7 @@ public class GameManager : MonoBehaviour
             // calculate z position based on mouse position and camera points to unit's z position
             Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(selectedUnit.transform.position).z);
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
-            selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, 1.3f, worldPosition.z);
+            selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, 1.5f, worldPosition.z);
         }
-    }
-
-    void SnapToGrid(GameObject unit, Vector3 position)
-    {
-        
     }
 }
