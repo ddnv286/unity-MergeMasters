@@ -2,16 +2,16 @@
 https://play.google.com/store/apps/details?id=com.fusee.MergeMaster
 
 UI
-Gold to upgrade (currency)
-2 upgrade buttons
-Battlefield
-Characters
-3D Camera
++ Gold to upgrade (currency)
++ 2 upgrade buttons
++ Battlefield
++ Characters
++ 3D Camera
 
 Battlefield
-Gridline (3x5)
-Cube character (reduced to cube from 3d model)
-2 sides (allies and enemies)
++ Gridline (5x3)
++ Cube character (reduced to cube from 3d model)
++ 2 sides (allies and enemies)
 
 -- 2D flat field--
 + plane
