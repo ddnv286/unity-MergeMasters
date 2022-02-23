@@ -2,8 +2,10 @@
 
 public class Unit : MonoBehaviour
 {
-    public int[,] coordinate = new int[1, 1];
-    void Awake () {
-        
-    }
+    string unitName;
+    int unitHealth;
+    int unitAttack;
+    int unitDefense;
+    int unitSpeed;
+    int unitRange;
 }
