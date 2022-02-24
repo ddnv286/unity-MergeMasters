@@ -285,7 +285,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 92133659}
-  - component: {fileID: 92133660}
   m_Layer: 2
   m_Name: Grid
   m_TagString: Untagged
@@ -307,23 +306,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &92133660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 92133658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a3bb1e148cc21342b81f525f865ecbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gridHeight: 3
-  _gridWidth: 5
-  _grid: {fileID: 92133659}
-  prefabGridCell: {fileID: 7946065821687544959, guid: f9a9ee5f8bdc90c4ba5f1a5a4b211e13,
-    type: 3}
 --- !u!1 &244095061
 GameObject:
   m_ObjectHideFlags: 0
@@ -2766,7 +2748,9 @@ MonoBehaviour:
   _gridHeight: 3
   _gridWidth: 5
   _allySide: {fileID: 1601395677}
-  gridManager: {fileID: 92133660}
+  prefabGridCell: {fileID: 7946065821687544959, guid: f9a9ee5f8bdc90c4ba5f1a5a4b211e13,
+    type: 3}
+  _grid: {fileID: 92133659}
 --- !u!4 &2097264984
 Transform:
   m_ObjectHideFlags: 0

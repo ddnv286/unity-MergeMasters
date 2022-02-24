@@ -12,17 +12,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] int _gridHeight = 3;
     [SerializeField] int _gridWidth = 5;
     [SerializeField] Transform _allySide;
-    public GridManager gridManager;
-    GridCell[,] grid;
+    public Transform prefabGridCell;
+    [SerializeField] Transform _grid;
+    public GridCell[,] grid = new GridCell[5, 3];
 
     private void Awake()
     {
-        this.grid = gridManager.grid;
+        InitiateGridcell();
     }
 
     void Update()
     {
-        //UpdateGrid();
+        checkOccupied();
         if (Input.GetMouseButtonDown(0))
         {
             if (selectedUnit == null)
@@ -46,10 +47,10 @@ public class GameManager : MonoBehaviour
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
                 // TODO: fixing 0.5f offset (0.5f offset is temporary for easier snapping to slot)
                 selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z) + 0.5f);
+                ToggleOccupied(selectedUnit.gameObject.transform.localPosition.x, selectedUnit.gameObject.transform.localPosition.z);
                 checkCollide(selectedUnit.transform);
                 selectedUnit = null;
                 Cursor.visible = true;
-
             }
         }
         if (selectedUnit != null)
@@ -61,8 +62,50 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void InitiateGridcell()
+    {
+        for (int x = 0; x < _gridWidth; x++)
+        {
+            for (int z = 0; z < _gridHeight; z++)
+            {
+                Transform obj = Instantiate(prefabGridCell, _grid);
+                obj.transform.localPosition = new Vector3(x, 0, z);
+                obj.transform.localScale = Vector3.one;
+                obj.gameObject.layer = 2;
+                obj.name = "Cell" + x + z;
+                grid[x, z] = obj.GetComponent<GridCell>();
+            }
+        }
+    }
+
+    // check if a tile is occupied by a unit
+    public void checkOccupied()
+    {
+        for (int x = 0; x < 5; x++)
+        {
+            for (int z = 0; z < 3; z++)
+            {
+                // .25f is chosen abitrarily
+                Vector3 pos = grid[x, z].transform.position;
+                var hitColliders = Physics.OverlapSphere(grid[x, z].gameObject.transform.position, .25f);
+                if (hitColliders.Length > 0)
+                {
+                    foreach (var hitCollider in hitColliders)
+                    {
+                        if (hitCollider.CompareTag("Unit"))
+                        {
+                            // Debug.Log(grid[x, z] + " is occupied");
+                            grid[x, z].isOccupied = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // the idea is to move the selectedUnit to IgnoreRaycast layer, then raycast to the selectedUnit's position to check if there is any other Unit in that position
-    void checkCollide (Transform unit) {
+    void checkCollide(Transform unit)
+    {
         // move the selectedUnit to IgnoreRaycast layer
         unit.gameObject.layer = 2;
         // raycast to the selectedUnit's position to check if there is any other Unit in that position
@@ -86,7 +129,7 @@ public class GameManager : MonoBehaviour
         unit.gameObject.layer = 0;
     }
 
-    public void Spawn ()
+    public void Spawn()
     {
         for (int i = 0; i < _gridWidth; i++)
         {
@@ -104,10 +147,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void ToggleOccupied(float x, float z)
+    {
+        grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z - 0.5f)].isOccupied = !grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z - 0.5f)].isOccupied;
+        Debug.Log("Cell" + Mathf.RoundToInt(x) + Mathf.RoundToInt(z - 0.5f) + " occupied: " + grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z - 0.5f)].isOccupied);
+    }
+
     // keep unit1 as leveled up unit, scale unit2 down to 0, update unit1 level and material color
-    void Merge (GameObject unit1, GameObject unit2)
+    void Merge(GameObject unit1, GameObject unit2)
     {
         unit2.transform.DOScale(0f, 0.25f);
+        ToggleOccupied(unit2.transform.localPosition.x, unit2.transform.localPosition.z);
         Destroy(unit2);
         unit1.GetComponent<Unit>().LevelUp();
         Debug.Log("Level up: " + unit1.GetComponent<Unit>().level);
