@@ -1,33 +1,28 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject selectedUnit;
-    public Transform prefabGridCell;
+    public Transform spawnedUnit;
+    public List<Unit> units = new List<Unit>(); // represents the level of unit when merged (WIP)
+    public GameObject raycastedObject; // check if selectedUnit is overlapped with raycastedObject
     static float Y_POS = 1.14f;
-    [SerializeField] int gridHeight = 3;
-    [SerializeField] int gridWidth = 5;
+    [SerializeField] int _gridHeight = 3;
+    [SerializeField] int _gridWidth = 5;
+    [SerializeField] Transform _allySide;
+    public GridManager gridManager;
+    GridCell[,] grid;
 
-    void Start () {
-        InitiateGridcell();
-    }
-
-    void InitiateGridcell () {
-        for (int i = 0; i < gridWidth; i++) {
-            for (int j = 0; j < gridHeight; j++) {
-                Vector3 worldPos = new Vector3(i, 0.77f, j);
-                Transform obj = Instantiate(prefabGridCell, worldPos, Quaternion.identity);
-                // TODO: fixing offset world position
-                obj.transform.position = new Vector3 (-2f + i, 0.77f, -2.5f + j);
-                obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                obj.name = "Cell" + i + j;
-            }
-        }
+    private void Awake()
+    {
+        this.grid = gridManager.grid;
     }
 
     void Update()
     {
+        //UpdateGrid();
         if (Input.GetMouseButtonDown(0))
         {
             if (selectedUnit == null)
@@ -50,10 +45,11 @@ public class GameManager : MonoBehaviour
                 Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(selectedUnit.transform.position).z);
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
                 // TODO: fixing 0.5f offset (0.5f offset is temporary for easier snapping to slot)
-                selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z)+0.5f);
-                CheckOverlapped(selectedUnit.GetComponent<Unit>());
+                selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z) + 0.5f);
+                checkCollide(selectedUnit.transform);
                 selectedUnit = null;
                 Cursor.visible = true;
+
             }
         }
         if (selectedUnit != null)
@@ -65,27 +61,55 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnMouseOver () {
-        // TODO: Drag unit to slot
+    // the idea is to move the selectedUnit to IgnoreRaycast layer, then raycast to the selectedUnit's position to check if there is any other Unit in that position
+    void checkCollide (Transform unit) {
+        // move the selectedUnit to IgnoreRaycast layer
+        unit.gameObject.layer = 2;
+        // raycast to the selectedUnit's position to check if there is any other Unit in that position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.tag.Equals("Unit") && unit.GetComponent<Unit>().level == hit.collider.GetComponent<Unit>().level)
+            {
+                // if there is other unit in that position, log the name of the unit out then merge them into new unit
+                Debug.Log(hit.collider.gameObject.name);
+                Merge(unit.gameObject, hit.collider.gameObject);
+            }
+        }
+        else
+        {
+            unit.gameObject.layer = 0;
+            return;
+        }
+        // if the selectedUnit was not merged
+        unit.gameObject.layer = 0;
     }
 
-    private void OnMouseExit () {
-
-    }
-    
-    void CheckOverlapped (Unit unit) {
-        BoxCollider collider = unit.GetComponent<BoxCollider>();
-        Collider[] otherColliders = Physics.OverlapBox(unit.transform.position, transform.localScale/2, Quaternion.identity, LayerMask.GetMask("Unit"));
-        if (otherColliders.Length > 0) {
-            Debug.Log("Overlapped");
-            Merge(unit, otherColliders[0].GetComponent<Unit>());
+    public void Spawn ()
+    {
+        for (int i = 0; i < _gridWidth; i++)
+        {
+            for (int j = 0; j < _gridHeight; j++)
+            {
+                if (!this.grid[i, j].GetComponent<GridCell>().isOccupied)
+                {
+                    Transform unit = Instantiate(spawnedUnit, _allySide);
+                    unit.transform.localPosition = new Vector3(i, 0, j);
+                    unit.transform.localScale = Vector3.one * .75f;
+                    unit.name = "Unit" + i + j;
+                    return;
+                }
+            }
         }
     }
 
-    private void Merge (Unit unit1, Unit unit2) {
-        // check if unit1 and unit2 are the same
-        if (unit1.gameObject.name == unit2.gameObject.name) {
-            unit1.gameObject.GetComponent<Material>().color = Color.yellow;            unit2.transform.DOScale(0f, .5f);
-        }
+    // keep unit1 as leveled up unit, scale unit2 down to 0, update unit1 level and material color
+    void Merge (GameObject unit1, GameObject unit2)
+    {
+        unit2.transform.DOScale(0f, 0.25f);
+        Destroy(unit2);
+        unit1.GetComponent<Unit>().LevelUp();
+        Debug.Log("Level up: " + unit1.GetComponent<Unit>().level);
     }
 }

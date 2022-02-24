@@ -1,11 +1,49 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class Unit : MonoBehaviour
 {
-    string unitName;
-    int unitHealth;
-    int unitAttack;
-    int unitDefense;
-    int unitSpeed;
-    int unitRange;
+    public string unitName;
+    public int unitHealth;
+    public int unitAttack;
+    public int unitDefense;
+    public int unitSpeed;
+    public int unitRange;
+    public int level = 0;
+    public Color currentLevel;
+    public Color[] levelColors = new Color[7];
+
+    private void Awake()
+    {
+        InitLevelColors();
+    }
+
+    void InitLevelColors ()
+    {
+        levelColors[0] = Color.white;
+        levelColors[1] = Color.gray;
+        levelColors[2] = Color.cyan;
+        levelColors[3] = Color.blue;
+        levelColors[4] = Color.magenta;
+        levelColors[5] = Color.red;
+        levelColors[6] = Color.black;
+        for (int i = 0; i < levelColors.Length; i++)
+        {
+            levelColors[i].a = .75f;
+        }
+    }
+
+    public void LevelUp ()
+    {
+        if (this.level != levelColors.Length)
+        {
+            this.level++;
+            this.unitName = levelColors[this.level].ToString() + " Cube Unit";
+            this.currentLevel = levelColors[this.level];
+            this.GetComponent<Renderer>().material.DOColor(this.GetComponent<Unit>().currentLevel, .25f);
+        } else
+        {
+            Debug.Log("Level Maxed.");
+        }
+    }
 }
