@@ -13,15 +13,17 @@ public class Unit : MonoBehaviour
     public Color currentLevel;
     public Color[] levelColors = new Color[7];
 
+    public Vector3 lastPosition;
+
     private void Awake()
     {
         InitLevelColors();
-    }
+    }   
 
     void InitLevelColors ()
     {
         levelColors[0] = Color.white;
-        levelColors[1] = Color.gray;
+        levelColors[1] = Color.yellow;
         levelColors[2] = Color.cyan;
         levelColors[3] = Color.blue;
         levelColors[4] = Color.magenta;
@@ -29,13 +31,13 @@ public class Unit : MonoBehaviour
         levelColors[6] = Color.black;
         for (int i = 0; i < levelColors.Length; i++)
         {
-            levelColors[i].a = .75f;
+            levelColors[i].a = .65f;
         }
     }
 
     public void LevelUp ()
     {
-        if (this.level != levelColors.Length)
+        if (this.level + 1 < levelColors.Length)
         {
             this.level++;
             this.unitName = levelColors[this.level].ToString() + " Cube Unit";
@@ -44,6 +46,7 @@ public class Unit : MonoBehaviour
         } else
         {
             Debug.Log("Level Maxed.");
+            this.gameObject.transform.DOLocalMove(this.lastPosition, .25f);
         }
     }
 }

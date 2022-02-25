@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public GameObject selectedUnit;
-    public Transform spawnedUnit;
+    public Transform spawnedUnit; // prefab to initiate
     public List<Unit> units = new List<Unit>(); // represents the level of unit when merged (WIP)
     public GameObject raycastedObject; // check if selectedUnit is overlapped with raycastedObject
     static float Y_POS = 1.14f;
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
                         return;
                     }
                     selectedUnit = hit.collider.gameObject;
+                    selectedUnit.GetComponent<Unit>().lastPosition = selectedUnit.transform.localPosition;
                     Cursor.visible = false;
                 }
             }
@@ -45,10 +46,22 @@ public class GameManager : MonoBehaviour
                 // calculate z position based on mouse position and camera points to unit's z position
                 Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(selectedUnit.transform.position).z);
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
+
                 // TODO: fixing 0.5f offset (0.5f offset is temporary for easier snapping to slot)
                 selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z) + 0.5f);
-                ToggleOccupied(selectedUnit.gameObject.transform.localPosition.x, selectedUnit.gameObject.transform.localPosition.z);
-                checkCollide(selectedUnit.transform);
+                // processing outbound position
+                if (selectedUnit.gameObject.transform.localPosition.x < _gridWidth && selectedUnit.gameObject.transform.localPosition.z < _gridHeight)
+                {
+                    // toggle occupied statuses
+                    ToggleOccupied(selectedUnit.GetComponent<Unit>().lastPosition.x, selectedUnit.GetComponent<Unit>().lastPosition.z);
+                    ToggleOccupied(selectedUnit.transform.localPosition.x, selectedUnit.transform.localPosition.z);
+                    checkCollide(selectedUnit.transform);
+                }
+                else
+                {
+                    selectedUnit.gameObject.transform.DOLocalMove(selectedUnit.GetComponent<Unit>().lastPosition, .25f);
+                }
+                // check if placed unit is collided with another unit to merge both units
                 selectedUnit = null;
                 Cursor.visible = true;
             }
@@ -119,6 +132,10 @@ public class GameManager : MonoBehaviour
                 Debug.Log(hit.collider.gameObject.name);
                 Merge(unit.gameObject, hit.collider.gameObject);
             }
+            else if (hit.collider.tag.Equals("Unit") && unit.GetComponent<Unit>().level != hit.collider.GetComponent<Unit>().level)
+            {
+                unit.transform.DOLocalMove(unit.GetComponent<Unit>().lastPosition, .25f);
+            }
         }
         else
         {
@@ -141,6 +158,7 @@ public class GameManager : MonoBehaviour
                     unit.transform.localPosition = new Vector3(i, 0, j);
                     unit.transform.localScale = Vector3.one * .75f;
                     unit.name = "Unit" + i + j;
+                    ToggleOccupied(i, j);
                     return;
                 }
             }
@@ -149,8 +167,8 @@ public class GameManager : MonoBehaviour
 
     void ToggleOccupied(float x, float z)
     {
-        grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z - 0.5f)].isOccupied = !grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z - 0.5f)].isOccupied;
-        Debug.Log("Cell" + Mathf.RoundToInt(x) + Mathf.RoundToInt(z - 0.5f) + " occupied: " + grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z - 0.5f)].isOccupied);
+        grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z)].isOccupied = !grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z)].isOccupied;
+        Debug.Log("Cell" + Mathf.RoundToInt(x) + Mathf.RoundToInt(z) + " occupied: " + grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z)].isOccupied);
     }
 
     // keep unit1 as leveled up unit, scale unit2 down to 0, update unit1 level and material color
