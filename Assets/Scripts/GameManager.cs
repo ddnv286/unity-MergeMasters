@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject selectedUnit;
     public Transform spawnedUnit; // prefab to initiate
-    public List<Unit> units = new List<Unit>(); // represents the level of unit when merged (WIP)
+    public List<Unit> remainingEnemies = new List<Unit>(); // contains remaining enemies
+    public List<Unit> remainingAllies = new List<Unit>(); // contains remaining allies
     public GameObject raycastedObject; // check if selectedUnit is overlapped with raycastedObject
     static float Y_POS = 1.14f;
     [SerializeField] int _gridHeight = 3;
@@ -23,7 +24,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        checkOccupied();
+        UpdateUnitList();
+        CheckOccupied();
         if (Input.GetMouseButtonDown(0))
         {
             if (selectedUnit == null)
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour
                     // toggle occupied statuses
                     ToggleOccupied(selectedUnit.GetComponent<Unit>().lastPosition.x, selectedUnit.GetComponent<Unit>().lastPosition.z);
                     ToggleOccupied(selectedUnit.transform.localPosition.x, selectedUnit.transform.localPosition.z);
-                    checkCollide(selectedUnit.transform);
+                    CheckCollide(selectedUnit.transform);
                 }
                 else
                 {
@@ -97,7 +99,7 @@ public class GameManager : MonoBehaviour
     }
 
     // check if a tile is occupied by a unit
-    public void checkOccupied()
+    public void CheckOccupied()
     {
         for (int x = 0; x < 5; x++)
         {
@@ -122,7 +124,7 @@ public class GameManager : MonoBehaviour
     }
 
     // the idea is to move the selectedUnit to IgnoreRaycast layer, then raycast to the selectedUnit's position to check if there is any other Unit in that position
-    void checkCollide(Transform unit)
+    void CheckCollide(Transform unit)
     {
         // move the selectedUnit to IgnoreRaycast layer
         unit.gameObject.layer = 2;
@@ -204,7 +206,40 @@ public class GameManager : MonoBehaviour
         }
         if (allyUnit != null && enemyUnit != null)
         {
-            allyUnit.MoveToTarget(enemyUnit);
+            allyUnit.MoveToTarget(NearestEnemy(allyUnit));
         }
+    }
+
+    void UpdateUnitList()
+    {
+        Unit[] allUnits = GameObject.FindObjectsOfType<Unit>();
+        foreach (Unit unit in allUnits)
+        {
+            if (unit.isEnemy)
+            {
+                remainingEnemies.Add(unit);
+            }
+            else
+            {
+                remainingAllies.Add(unit);
+            }
+        }
+    }
+
+    // returns nearest enemy
+    public Unit NearestEnemy(Unit unit)
+    {
+        Unit nearestEnemy = null;
+        float minDistance = Mathf.Infinity;
+        foreach (Unit enemy in remainingEnemies)
+        {
+            float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+        return nearestEnemy;
     }
 }

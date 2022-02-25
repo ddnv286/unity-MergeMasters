@@ -4,8 +4,8 @@ using DG.Tweening;
 public class Unit : MonoBehaviour
 {
     public string unitName;
-    public int unitHealth;
-    public int unitAttack;
+    public int unitHealth = 100;
+    public int unitAttack = 10;
     public int unitDefense;
     public float unitSpeed;
     public float unitRange;
@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
     public enum Status { Idle, Moving, Attacking, Dead };
     public Status currentStatus = Status.Idle;
     public Vector3 lastPosition;
+    private Unit _target;
 
     private void Awake()
     {
@@ -53,7 +54,6 @@ public class Unit : MonoBehaviour
         }
     }
 
-    Unit _targetMoving;
     public void Update()
     {
         if (this.currentStatus == Status.Moving)
@@ -61,9 +61,9 @@ public class Unit : MonoBehaviour
             this.unitSpeed = 1f;
             this.unitRange = 1.5f;
             {
-                if (Vector3.Distance(this.transform.position, _targetMoving.transform.position) > this.unitRange)
+                if (Vector3.Distance(this.transform.position, _target.transform.position) > this.unitRange)
                 {
-                    this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _targetMoving.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
+                    this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _target.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
                 }
                 else
                 {
@@ -73,10 +73,9 @@ public class Unit : MonoBehaviour
         }
     }
 
-
     public void MoveToTarget(Unit target)
     {
-        _targetMoving = target;
+        _target = target;
         this.currentStatus = Status.Moving;
     }
 }

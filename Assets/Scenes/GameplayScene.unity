@@ -2006,7 +2006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1226733983
 Transform:
   m_ObjectHideFlags: 0
@@ -2637,7 +2637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1816759539
 Transform:
   m_ObjectHideFlags: 0
@@ -2994,7 +2994,8 @@ MonoBehaviour:
   selectedUnit: {fileID: 0}
   spawnedUnit: {fileID: 1749541274466711850, guid: fc7e1220842582048aea5f35b446260b,
     type: 3}
-  units: []
+  remainingEnemies: []
+  remainingAllies: []
   raycastedObject: {fileID: 0}
   _gridHeight: 3
   _gridWidth: 5
