@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
                 // TODO: fixing 0.5f offset (0.5f offset is temporary for easier snapping to slot)
                 selectedUnit.gameObject.transform.position = new Vector3(Mathf.RoundToInt(worldPosition.x), Y_POS, Mathf.RoundToInt(worldPosition.z) + 0.5f);
                 // processing outbound position
-                if (selectedUnit.gameObject.transform.localPosition.x < _gridWidth && selectedUnit.gameObject.transform.localPosition.z < _gridHeight)
+                if (isValidPosition(selectedUnit.gameObject.transform.localPosition.x, selectedUnit.gameObject.transform.localPosition.z))
                 {
                     // toggle occupied statuses
                     ToggleOccupied(selectedUnit.GetComponent<Unit>().lastPosition.x, selectedUnit.GetComponent<Unit>().lastPosition.z);
@@ -73,6 +73,10 @@ public class GameManager : MonoBehaviour
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
             selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, 1.5f, worldPosition.z);
         }
+    }
+
+    bool isValidPosition (float x, float z) {
+        return (x >= 0 && x < _gridWidth && z >= 0 && z < _gridHeight);
     }
 
     void InitiateGridcell()
