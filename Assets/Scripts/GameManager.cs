@@ -6,8 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject selectedUnit;
     public Transform spawnedUnit; // prefab to initiate
-    public List<Unit> remainingEnemies = new List<Unit>(); // contains remaining enemies
-    public List<Unit> remainingAllies = new List<Unit>(); // contains remaining allies
+    public Unit[,] remainingEnemies = new Unit[5, 3]; // contains remaining enemies
+    public Unit[,] remainingAllies = new Unit[5, 3]; // contains remaining allies
     public GameObject raycastedObject; // check if selectedUnit is overlapped with raycastedObject
     static float Y_POS = 1.14f;
     [SerializeField] int _gridHeight = 3;
@@ -212,16 +212,20 @@ public class GameManager : MonoBehaviour
 
     void UpdateUnitList()
     {
+        // bug: as being called in Update() function, GameManager keeps adding existed units to their respective lists to infinity, lead to the issue that ally cannot find the nearest enemy
         Unit[] allUnits = GameObject.FindObjectsOfType<Unit>();
         foreach (Unit unit in allUnits)
         {
+            int x = Mathf.RoundToInt(unit.transform.localPosition.x);
+            int z = Mathf.RoundToInt(unit.transform.localPosition.z);
             if (unit.isEnemy)
             {
-                remainingEnemies.Add(unit);
+                remainingEnemies[x, z] = unit;
             }
             else
             {
-                remainingAllies.Add(unit);
+                remainingAllies[x, z] = unit;
+                remainingAllies[x, z].currentStatus = Unit.Status.Idle;
             }
         }
     }
@@ -233,11 +237,14 @@ public class GameManager : MonoBehaviour
         float minDistance = Mathf.Infinity;
         foreach (Unit enemy in remainingEnemies)
         {
-            float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
-            if (distance < minDistance)
+            if (enemy != null)
             {
-                minDistance = distance;
-                nearestEnemy = enemy;
+                float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = enemy;
+                }
             }
         }
         return nearestEnemy;

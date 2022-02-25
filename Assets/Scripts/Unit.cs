@@ -4,8 +4,8 @@ using DG.Tweening;
 public class Unit : MonoBehaviour
 {
     public string unitName;
-    public int unitHealth = 100;
-    public int unitAttack = 10;
+    public int unitHealth;
+    public int unitAttack;
     public int unitDefense;
     public float unitSpeed;
     public float unitRange;
@@ -21,6 +21,23 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         InitLevelColors();
+    }
+
+    void InitStats()
+    {
+        this.unitHealth = 100;
+        this.unitAttack = 10;
+        this.unitDefense = 5;
+        this.unitSpeed = 1f;
+        this.unitRange = 1.5f;
+    }
+
+    void UpdateStats()
+    {
+        this.unitHealth += 100 * (this.level + 1);
+        this.unitAttack += 10 * (this.level + 1);
+        this.unitDefense += 5 * (this.level + 1);
+        // speed and range remain unchanged
     }
 
     void InitLevelColors()
@@ -58,8 +75,6 @@ public class Unit : MonoBehaviour
     {
         if (this.currentStatus == Status.Moving)
         {
-            this.unitSpeed = 1f;
-            this.unitRange = 1.5f;
             {
                 if (Vector3.Distance(this.transform.position, _target.transform.position) > this.unitRange)
                 {
@@ -71,6 +86,25 @@ public class Unit : MonoBehaviour
                 }
             }
         }
+        else if (this.currentStatus == Status.Attacking)
+        {
+            Attack(_target);
+        }
+    }
+
+    public void Attack(Unit target)
+    {
+        this.currentStatus = Status.Attacking;
+        target.unitHealth -= this.unitAttack - target.unitDefense;
+        Debug.Log(target.name + " remaining HP: " + target.unitHealth);
+        if (target.unitHealth <= 0)
+        {
+            target.currentStatus = Status.Dead;
+            Debug.Log(target.name + " is " + target.currentStatus);
+            target.gameObject.transform.DOScale(0, .5f);
+            Destroy(target);
+        }
+        this.currentStatus = Status.Idle;
     }
 
     public void MoveToTarget(Unit target)
