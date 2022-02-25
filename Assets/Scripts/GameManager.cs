@@ -75,7 +75,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    bool isValidPosition (float x, float z) {
+    bool isValidPosition(float x, float z)
+    {
         return (x >= 0 && x < _gridWidth && z >= 0 && z < _gridHeight);
     }
 
@@ -175,7 +176,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Cell" + Mathf.RoundToInt(x) + Mathf.RoundToInt(z) + " occupied: " + grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z)].isOccupied);
     }
 
-    // keep unit1 as leveled up unit, scale unit2 down to 0, update unit1 level and material color
+    // keep unit1 as leveled up unit, scale unit2 down to 0 then destroy it, update unit1 level and its material color
     void Merge(GameObject unit1, GameObject unit2)
     {
         unit2.transform.DOScale(0f, 0.25f);
@@ -183,5 +184,27 @@ public class GameManager : MonoBehaviour
         Destroy(unit2);
         unit1.GetComponent<Unit>().LevelUp();
         Debug.Log("Level up: " + unit1.GetComponent<Unit>().level);
+    }
+
+    public void Move()
+    {
+        Unit[] units = GameObject.FindObjectsOfType<Unit>();
+        Unit allyUnit = null;
+        Unit enemyUnit = null;
+        foreach (Unit unit in units)
+        {
+            if (unit.isEnemy)
+            {
+                enemyUnit = unit;
+            }
+            else
+            {
+                allyUnit = unit;
+            }
+        }
+        if (allyUnit != null && enemyUnit != null)
+        {
+            allyUnit.MoveToTarget(enemyUnit);
+        }
     }
 }
