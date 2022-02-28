@@ -5,11 +5,11 @@ public class Unit : MonoBehaviour
 {
     public int maxLevel = 7;
     public string unitName;
-    public int unitHealth = 100;
-    public int unitAttack = 10;
-    public int unitDefense = 5;
-    public float unitSpeed = 1f;
-    public float unitRange = 1.5f;
+    public int unitHealth;
+    public int unitAttack;
+    public int unitDefense;
+    public float unitSpeed;
+    public float unitRange;
     public float unitAttackDelay = 1.5f;
     public float nextAttack;
     public int level = 0;
@@ -19,12 +19,22 @@ public class Unit : MonoBehaviour
     public enum Status { Idle, Moving, Attacking, Dead };
     public Status currentStatus = Status.Idle;
     public Vector3 lastPosition;
+    public GameObject projectile; // arrow
+    public float shootForce, upwardForce;
     private Unit _target;
 
     private void Awake()
     {
+        InitStats();
         InitLevelColors();
         nextAttack = unitAttackDelay;
+    }
+
+    void InitStats()
+    {
+        this.unitHealth = 100;
+        this.unitDefense = 5;
+        this.unitAttack = 10;
     }
 
     void InitLevelColors()
@@ -73,19 +83,23 @@ public class Unit : MonoBehaviour
                 else
                 {
                     // attack enemy target if in range
-                    // processing attack delay here
-                    if (nextAttack > 0)
-                    {
-                        nextAttack -= Time.deltaTime;
-                    }
-                    else if (nextAttack <= 0)
-                    {
-                        this.currentStatus = Status.Attacking;
-                        Debug.Log(_target.name + "'s remaining HP: " + _target.unitHealth);
-                        Attack(_target);
-                        nextAttack = unitAttackDelay;
-                    }
+                    this.currentStatus = Status.Attacking;
                 }
+            }
+        }
+        if (this.currentStatus == Status.Attacking)
+        {
+            // processing attack delay here
+            if (nextAttack > 0)
+            {
+                nextAttack -= Time.deltaTime;
+            }
+            else if (nextAttack <= 0)
+            {
+                this.currentStatus = Status.Attacking;
+                Debug.Log(_target.name + "'s remaining HP: " + _target.unitHealth);
+                Attack(_target);
+                nextAttack = unitAttackDelay;
             }
         }
     }
@@ -102,29 +116,50 @@ public class Unit : MonoBehaviour
         this.unitHealth -= damage - unitDefense > 0 ? damage - unitDefense : 0;
         if (this.unitHealth <= 0)
         {
-            this.currentStatus = Status.Dead;
             this.gameObject.transform.DOScale(0, .5f);
+            this.currentStatus = Status.Dead;
             this.gameObject.SetActive(false);
         }
     }
 
     public void Attack(Unit target)
     {
-        switch (this.currentStatus)
+        if (target.gameObject.active)
         {
-            case Status.Idle:
-                break;
-            case Status.Moving:
-                {
-                    MoveToTarget(target);
+            switch (this.currentStatus)
+            {
+                case Status.Idle:
                     break;
-                }
-            case Status.Attacking:
-                {
-                    this.currentStatus = Status.Attacking;
-                    target.TakeDamage(this.unitAttack);
-                    break;
-                }
+                case Status.Moving:
+                    {
+                        MoveToTarget(target);
+                        break;
+                    }
+                case Status.Attacking:
+                    {
+                        this.currentStatus = Status.Attacking;
+                        ShootProjectile(target);
+                        target.TakeDamage(this.unitAttack);
+                        break;
+                    }
+            }
+        }
+        else
+        {
+            this.currentStatus = Status.Idle;
+        }
+    }
+
+    void ShootProjectile(Unit target)
+    {
+        RaycastHit hit;
+        // cast ray forward
+        if (Physics.Raycast(this.transform.position, target.transform.position, out hit))
+        {
+            var arrow = Instantiate(projectile, projectile.transform.position, Quaternion.identity);
+            arrow.GetComponent<Rigidbody>().AddForce(arrow.transform.forward * shootForce);
+            arrow.GetComponent<Rigidbody>().AddForce(arrow.transform.up * upwardForce);
+            // Destroy(arrow);
         }
     }
 }

@@ -216,6 +216,8 @@ public class GameManager : MonoBehaviour
     {
         if (remainingAllies.Count != 0)
         {
+            // hide the gridlines when Move button is pressed.
+            _grid.transform.DOScale(0, 0);
             foreach (Unit ally in remainingAllies)
             {
                 ally.MoveToTarget(NearestEnemy(ally));
