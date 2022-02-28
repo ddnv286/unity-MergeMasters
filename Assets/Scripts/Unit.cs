@@ -3,12 +3,15 @@ using DG.Tweening;
 
 public class Unit : MonoBehaviour
 {
+    public int maxLevel = 7;
     public string unitName;
-    public int unitHealth;
-    public int unitAttack;
-    public int unitDefense;
-    public float unitSpeed;
-    public float unitRange;
+    public int unitHealth = 100;
+    public int unitAttack = 10;
+    public int unitDefense = 5;
+    public float unitSpeed = 1f;
+    public float unitRange = 1.5f;
+    public float unitAttackDelay = 1.5f;
+    public float nextAttack;
     public int level = 0;
     public bool isEnemy = false;
     public Color currentLevel;
@@ -21,23 +24,7 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         InitLevelColors();
-    }
-
-    void InitStats()
-    {
-        this.unitHealth = 100;
-        this.unitAttack = 10;
-        this.unitDefense = 5;
-        this.unitSpeed = 1f;
-        this.unitRange = 1.5f;
-    }
-
-    void UpdateStats()
-    {
-        this.unitHealth += 100 * (this.level + 1);
-        this.unitAttack += 10 * (this.level + 1);
-        this.unitDefense += 5 * (this.level + 1);
-        // speed and range remain unchanged
+        nextAttack = unitAttackDelay;
     }
 
     void InitLevelColors()
@@ -75,41 +62,69 @@ public class Unit : MonoBehaviour
     {
         if (this.currentStatus == Status.Moving)
         {
+            this.unitSpeed = 1f;
+            this.unitRange = 1.5f;
             {
                 if (Vector3.Distance(this.transform.position, _target.transform.position) > this.unitRange)
                 {
+                    // keep moving until the target is in range
                     this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _target.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
                 }
                 else
                 {
-                    this.currentStatus = Status.Idle;
+                    // attack enemy target if in range
+                    // processing attack delay here
+                    if (nextAttack > 0)
+                    {
+                        nextAttack -= Time.deltaTime;
+                    }
+                    else if (nextAttack <= 0)
+                    {
+                        this.currentStatus = Status.Attacking;
+                        Debug.Log(_target.name + "'s remaining HP: " + _target.unitHealth);
+                        Attack(_target);
+                        nextAttack = unitAttackDelay;
+                    }
                 }
             }
         }
-        else if (this.currentStatus == Status.Attacking)
-        {
-            Attack(_target);
-        }
-    }
-
-    public void Attack(Unit target)
-    {
-        this.currentStatus = Status.Attacking;
-        target.unitHealth -= this.unitAttack - target.unitDefense;
-        Debug.Log(target.name + " remaining HP: " + target.unitHealth);
-        if (target.unitHealth <= 0)
-        {
-            target.currentStatus = Status.Dead;
-            Debug.Log(target.name + " is " + target.currentStatus);
-            target.gameObject.transform.DOScale(0, .5f);
-            Destroy(target);
-        }
-        this.currentStatus = Status.Idle;
     }
 
     public void MoveToTarget(Unit target)
     {
         _target = target;
         this.currentStatus = Status.Moving;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        // if unit defense is higher than damage, unit will not take damage
+        this.unitHealth -= damage - unitDefense > 0 ? damage - unitDefense : 0;
+        if (this.unitHealth <= 0)
+        {
+            this.currentStatus = Status.Dead;
+            this.gameObject.transform.DOScale(0, .5f);
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    public void Attack(Unit target)
+    {
+        switch (this.currentStatus)
+        {
+            case Status.Idle:
+                break;
+            case Status.Moving:
+                {
+                    MoveToTarget(target);
+                    break;
+                }
+            case Status.Attacking:
+                {
+                    this.currentStatus = Status.Attacking;
+                    target.TakeDamage(this.unitAttack);
+                    break;
+                }
+        }
     }
 }

@@ -6,8 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject selectedUnit;
     public Transform spawnedUnit; // prefab to initiate
-    public Unit[,] remainingEnemies = new Unit[5, 3]; // contains remaining enemies
-    public Unit[,] remainingAllies = new Unit[5, 3]; // contains remaining allies
+    public List<Unit> remainingEnemies = new List<Unit>(); // contains remaining enemies
+    public List<Unit> remainingAllies = new List<Unit>(); // contains remaining allies
     public GameObject raycastedObject; // check if selectedUnit is overlapped with raycastedObject
     static float Y_POS = 1.14f;
     [SerializeField] int _gridHeight = 3;
@@ -16,10 +16,13 @@ public class GameManager : MonoBehaviour
     public Transform prefabGridCell;
     [SerializeField] Transform _grid;
     public GridCell[,] grid = new GridCell[5, 3];
+    [SerializeField] Formation formation;
 
     private void Awake()
     {
         InitiateGridcell();
+        UpdateUnitList();
+        InitFormation();
     }
 
     void Update()
@@ -75,6 +78,19 @@ public class GameManager : MonoBehaviour
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
             selectedUnit.gameObject.transform.position = new Vector3(worldPosition.x, 1.5f, worldPosition.z);
         }
+        CheckWinCondition();
+    }
+
+    public void InitFormation () {
+        // WIP
+        this.formation = new Formation();
+        this.formation.allies = new Unit[remainingAllies.Count];
+        this.formation.allyCoordinates = new Vector2Int [remainingAllies.Count];
+        for (int i = 0; i < remainingAllies.Count; i++) {
+            this.formation.allies[i] = remainingAllies[i];
+            this.formation.allyCoordinates[i] = new Vector2Int(Mathf.RoundToInt(remainingAllies[i].transform.localPosition.x),Mathf.RoundToInt(remainingAllies[i].transform.localPosition.z));
+        }
+        Debug.Log("Formation initiated.");
     }
 
     bool isValidPosition(float x, float z)
@@ -135,9 +151,17 @@ public class GameManager : MonoBehaviour
         {
             if (hit.collider.tag.Equals("Unit") && unit.GetComponent<Unit>().level == hit.collider.GetComponent<Unit>().level)
             {
-                // if there is other unit in that position, log the name of the unit out then merge them into new unit
-                Debug.Log(hit.collider.gameObject.name);
-                Merge(unit.gameObject, hit.collider.gameObject);
+                // if there is other unit with same level in that position, log the name of the unit out then merge them into new unit
+                // move the selectedUnit back to it last position in case the level is maxed out
+                if (unit.GetComponent<Unit>().level + 1 == unit.GetComponent<Unit>().maxLevel)
+                {
+                    unit.gameObject.transform.DOLocalMove(unit.GetComponent<Unit>().lastPosition, .25f);
+                }
+                else
+                {
+                    Debug.Log(hit.collider.gameObject.name);
+                    Merge(unit.gameObject, hit.collider.gameObject);
+                }
             }
             else if (hit.collider.tag.Equals("Unit") && unit.GetComponent<Unit>().level != hit.collider.GetComponent<Unit>().level)
             {
@@ -190,42 +214,29 @@ public class GameManager : MonoBehaviour
 
     public void Move()
     {
-        Unit[] units = GameObject.FindObjectsOfType<Unit>();
-        Unit allyUnit = null;
-        Unit enemyUnit = null;
-        foreach (Unit unit in units)
+        if (remainingAllies.Count != 0)
         {
-            if (unit.isEnemy)
+            foreach (Unit ally in remainingAllies)
             {
-                enemyUnit = unit;
+                ally.MoveToTarget(NearestEnemy(ally));
             }
-            else
-            {
-                allyUnit = unit;
-            }
-        }
-        if (allyUnit != null && enemyUnit != null)
-        {
-            allyUnit.MoveToTarget(NearestEnemy(allyUnit));
         }
     }
 
     void UpdateUnitList()
     {
-        // bug: as being called in Update() function, GameManager keeps adding existed units to their respective lists to infinity, lead to the issue that ally cannot find the nearest enemy
+        remainingAllies.Clear();
+        remainingEnemies.Clear();
         Unit[] allUnits = GameObject.FindObjectsOfType<Unit>();
         foreach (Unit unit in allUnits)
         {
-            int x = Mathf.RoundToInt(unit.transform.localPosition.x);
-            int z = Mathf.RoundToInt(unit.transform.localPosition.z);
             if (unit.isEnemy)
             {
-                remainingEnemies[x, z] = unit;
+                remainingEnemies.Add(unit);
             }
             else
             {
-                remainingAllies[x, z] = unit;
-                remainingAllies[x, z].currentStatus = Unit.Status.Idle;
+                remainingAllies.Add(unit);
             }
         }
     }
@@ -237,16 +248,26 @@ public class GameManager : MonoBehaviour
         float minDistance = Mathf.Infinity;
         foreach (Unit enemy in remainingEnemies)
         {
-            if (enemy != null)
+            float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
+            if (distance < minDistance)
             {
-                float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    nearestEnemy = enemy;
-                }
+                minDistance = distance;
+                nearestEnemy = enemy;
             }
         }
         return nearestEnemy;
     }
+
+    public void CheckWinCondition()
+    {
+        if (remainingEnemies.Count == 0)
+        {
+            Debug.Log("All enemies defeated");
+        }
+    }
+}
+
+public class Formation {
+    public Unit[] allies;
+    public Vector2Int[] allyCoordinates;
 }

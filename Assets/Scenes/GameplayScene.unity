@@ -173,7 +173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &61661621
 Transform:
   m_ObjectHideFlags: 0
@@ -200,12 +200,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -355,12 +358,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -480,12 +486,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -656,7 +665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &407608474
 Transform:
   m_ObjectHideFlags: 0
@@ -683,14 +692,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
-  isEnemy: 0
+  isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
@@ -947,7 +959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &624846020
 Transform:
   m_ObjectHideFlags: 0
@@ -974,12 +986,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -1321,14 +1336,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
-  isEnemy: 0
+  isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
@@ -1446,14 +1464,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
-  isEnemy: 0
+  isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
@@ -1571,12 +1592,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -1824,12 +1848,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -2033,12 +2060,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -2158,14 +2188,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
-  isEnemy: 0
+  isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
@@ -2283,14 +2316,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
-  isEnemy: 0
+  isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
@@ -2637,7 +2673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1816759539
 Transform:
   m_ObjectHideFlags: 0
@@ -2664,12 +2700,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -2883,12 +2922,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
   isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
@@ -3036,7 +3078,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2128876633
 Transform:
   m_ObjectHideFlags: 0
@@ -3063,14 +3105,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 7
   unitName: 
   unitHealth: 0
   unitAttack: 0
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
+  unitAttackDelay: 0.75
+  nextAttack: 0
   level: 0
-  isEnemy: 0
+  isEnemy: 1
   currentLevel: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
@@ -3157,7 +3202,7 @@ PrefabInstance:
     - target: {fileID: 1749541274466711850, guid: fc7e1220842582048aea5f35b446260b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1749541274466711850, guid: fc7e1220842582048aea5f35b446260b,
         type: 3}
@@ -3207,12 +3252,12 @@ PrefabInstance:
     - target: {fileID: 1749541274466711853, guid: fc7e1220842582048aea5f35b446260b,
         type: 3}
       propertyPath: m_Name
-      value: Slot10
+      value: Slot40
       objectReference: {fileID: 0}
     - target: {fileID: 1749541274466711853, guid: fc7e1220842582048aea5f35b446260b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc7e1220842582048aea5f35b446260b, type: 3}
