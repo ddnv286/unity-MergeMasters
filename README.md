@@ -32,7 +32,7 @@ Convert mouse position to unity position then field game coordinate int(x, z)
 * Set position(new position)
 
 -- Finding Target --
-public static Vector3 MoveTowards(Vector3 current, Vector3 target, float maxDistanceDelta);
+* public static Vector3 MoveTowards(Vector3 current, Vector3 target, float maxDistanceDelta);
 -- this returns the new position in Vector3 and doesn't overshoot target, we can control the speed of movement with maxDistanceDelta and it can be multiplied with Time.deltaTime or Time.fixedDeltaTime to make the speed not affected by frame rate.
 
 -- Flow --
