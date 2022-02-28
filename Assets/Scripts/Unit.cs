@@ -73,7 +73,7 @@ public class Unit : MonoBehaviour
         if (this.currentStatus == Status.Moving)
         {
             this.unitSpeed = 1f;
-            this.unitRange = 1.5f;
+            this.unitRange = 5f;
             {
                 if (Vector3.Distance(this.transform.position, _target.transform.position) > this.unitRange)
                 {
@@ -152,14 +152,13 @@ public class Unit : MonoBehaviour
 
     void ShootProjectile(Unit target)
     {
-        RaycastHit hit;
-        // cast ray forward
-        if (Physics.Raycast(this.transform.position, target.transform.position, out hit))
-        {
-            var arrow = Instantiate(projectile, projectile.transform.position, Quaternion.identity);
-            arrow.GetComponent<Rigidbody>().AddForce(arrow.transform.forward * shootForce);
-            arrow.GetComponent<Rigidbody>().AddForce(arrow.transform.up * upwardForce);
-            // Destroy(arrow);
-        }
+        GameObject tempObj = Instantiate(projectile, this.transform.position + Camera.main.transform.forward*1.5f, Quaternion.identity);
+        //Set position of the bullet in front of the player
+        //tempObj.transform.position = transform.position + Camera.main.transform.forward*1.5f;
+        //Get the Rigidbody that is attached to that instantiated bullet
+        //Shoot the Bullet 
+        //tempObj.GetComponent<Rigidbody>().velocity = Camera.main.transform.forward * shootForce;
+        tempObj.GetComponent<Rigidbody>().AddForce(tempObj.transform.forward * shootForce);
+        tempObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.up * upwardForce);
     }
 }
