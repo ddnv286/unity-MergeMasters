@@ -30,3 +30,16 @@ Convert mouse position to unity position then field game coordinate int(x, z)
 * OnMouseMove()
 * OnMouseExit()
 * Set position(new position)
+
+-- Finding Target --
+public static Vector3 MoveTowards(Vector3 current, Vector3 target, float maxDistanceDelta);
+-- this returns the new position in Vector3 and doesn't overshoot target, we can control the speed of movement with maxDistanceDelta and it can be multiplied with Time.deltaTime or Time.fixedDeltaTime to make the speed not affected by frame rate.
+
+-- Flow --
+* If the unit's current status is Idle, change it to Moving when Attack or Move button is clicked.
+* Move the unit by maxDistanceDelta from current towards target per frame
+* If target is in unitRange, stop moving and change the unit's current status to Attacking.
+* Add attackSpeed attrib, set the delay between each attack.
+* If there is no enemy left, change the status to Idle.
+* If the unit's health is reduced to 0, change the status to Dead.
+* In case the target unit is changed to Status.Dead before an ally reach the target, either change the ally unit status to Idle or find NearestTarget(ally)
