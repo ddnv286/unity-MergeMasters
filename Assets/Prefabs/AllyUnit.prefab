@@ -132,8 +132,6 @@ MonoBehaviour:
   lastPosition: {x: 0, y: 0, z: 0}
   pfProjectile: {fileID: 5594604302313985786, guid: b50458148d12b084b9213cda369fb12f,
     type: 3}
-  shootForce: 50
-  upwardForce: 1
   healthbar: {fileID: 8929001876863031721}
 --- !u!1 &4897796898102212050
 GameObject:
@@ -414,7 +412,7 @@ RectTransform:
   m_LocalRotation: {x: 0.00000013544889, y: -0.0000000036840593, z: -0.00000022263163,
     w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.08, y: 0.08, z: 1}
+  m_LocalScale: {x: 0.06, y: 0.06, z: 1}
   m_Children:
   - {fileID: 5710748475019174544}
   m_Father: {fileID: 1749541274466711850}

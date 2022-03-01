@@ -206,12 +206,12 @@ PrefabInstance:
     - target: {fileID: 7645506005611942216, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7645506005611942216, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8268531872676815100, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
@@ -276,7 +276,7 @@ PrefabInstance:
     - target: {fileID: 8268531872676815101, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8268531872676815101, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
@@ -557,12 +557,12 @@ PrefabInstance:
     - target: {fileID: 7645506005611942216, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7645506005611942216, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8268531872676815100, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
@@ -623,6 +623,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268531872676815101, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8268531872676815101, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
@@ -936,8 +941,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.16340335, g: 0.18790792, b: 0.2264151, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1941,6 +1946,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot00
       objectReference: {fileID: 0}
+    - target: {fileID: 6858105917710723316, guid: fc7e1220842582048aea5f35b446260b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7620626783570755978, guid: fc7e1220842582048aea5f35b446260b,
         type: 3}
       propertyPath: m_UseGravity
@@ -1958,12 +1968,12 @@ PrefabInstance:
     - target: {fileID: 7645506005611942216, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7645506005611942216, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8268531872676815100, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
         type: 3}
@@ -2024,6 +2034,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268531872676815101, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0badb1d2a01bf2a49aa9b30abe8e4c3c, type: 3}
