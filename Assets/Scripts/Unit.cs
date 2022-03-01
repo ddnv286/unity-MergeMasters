@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class Unit : MonoBehaviour
@@ -6,6 +7,7 @@ public class Unit : MonoBehaviour
     public int maxLevel = 7;
     public string unitName;
     public int unitHealth;
+    public int unitMaxHealth;
     public int unitAttack;
     public int unitDefense;
     public float unitSpeed;
@@ -19,9 +21,9 @@ public class Unit : MonoBehaviour
     public enum Status { Idle, Moving, Attacking, Dead };
     public Status currentStatus = Status.Idle;
     public Vector3 lastPosition;
-    public GameObject projectile; // arrow
-    public float shootForce, upwardForce;
+    public GameObject pfProjectile; // arrow
     private Unit _target;
+    public Healthbar healthbar;
 
     private void Awake()
     {
@@ -32,7 +34,10 @@ public class Unit : MonoBehaviour
 
     void InitStats()
     {
-        this.unitHealth = 100;
+        this.unitMaxHealth = 100;
+        this.unitHealth = this.unitMaxHealth;
+        this.healthbar.SetMaxHealth(this.unitMaxHealth);
+        this.healthbar.SetHealth(this.unitHealth);
         this.unitDefense = 5;
         this.unitAttack = 10;
     }
@@ -79,6 +84,7 @@ public class Unit : MonoBehaviour
                 {
                     // keep moving until the target is in range
                     this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _target.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
+                    this.healthbar.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _target.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
                 }
                 else
                 {
@@ -114,6 +120,7 @@ public class Unit : MonoBehaviour
     {
         // if unit defense is higher than damage, unit will not take damage
         this.unitHealth -= damage - unitDefense > 0 ? damage - unitDefense : 0;
+        this.healthbar.SetHealth(this.unitHealth);
         if (this.unitHealth <= 0)
         {
             this.gameObject.transform.DOScale(0, .5f);
@@ -124,7 +131,7 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit target)
     {
-        if (target.gameObject.active)
+        if (target.gameObject.activeSelf)
         {
             switch (this.currentStatus)
             {
@@ -150,15 +157,11 @@ public class Unit : MonoBehaviour
         }
     }
 
-    void ShootProjectile(Unit target)
+    private void ShootProjectile(Unit target)
     {
-        GameObject tempObj = Instantiate(projectile, this.transform.position + Camera.main.transform.forward*1.5f, Quaternion.identity);
-        //Set position of the bullet in front of the player
-        //tempObj.transform.position = transform.position + Camera.main.transform.forward*1.5f;
-        //Get the Rigidbody that is attached to that instantiated bullet
-        //Shoot the Bullet 
-        //tempObj.GetComponent<Rigidbody>().velocity = Camera.main.transform.forward * shootForce;
-        tempObj.GetComponent<Rigidbody>().AddForce(tempObj.transform.forward * shootForce);
-        tempObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.up * upwardForce);
+        // 3 ways to shoot a projectile: using transform, using collider, using raycast (raycast is like instant projectile)
+        // instantiate prefab, then shoot the prefab to the target
+        var projectile = Instantiate(pfProjectile, this.transform.position + Vector3.forward * .7f, transform.rotation);
+        projectile.GetComponent<Projectile>().Setup((target.transform.position - this.transform.position).normalized);
     }
 }

@@ -220,13 +220,15 @@ public class GameManager : MonoBehaviour
             _grid.transform.DOScale(0, 0);
             foreach (Unit ally in remainingAllies)
             {
-                ally.MoveToTarget(NearestEnemy(ally));
+                Unit nearest = NearestEnemy(ally);
+                ally.MoveToTarget(nearest);
             }
         }
     }
 
     void UpdateUnitList()
     {
+        // prevent adding both list to infinity
         remainingAllies.Clear();
         remainingEnemies.Clear();
         Unit[] allUnits = GameObject.FindObjectsOfType<Unit>();
