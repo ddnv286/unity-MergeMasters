@@ -40,7 +40,9 @@
      <Compile Include="Assets\Scripts\GridCell.cs" />
      <Compile Include="Assets\Scripts\GridManager.cs" />
      <Compile Include="Assets\Scripts\Healthbar.cs" />
+     <Compile Include="Assets\Scripts\MeleeUnit.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
+     <Compile Include="Assets\Scripts\RangedUnit.cs" />
      <Compile Include="Assets\Scripts\Unit.cs" />
      <None Include="Assets\Scripts\calculations.txt" />
     <Reference Include="UnityEngine">

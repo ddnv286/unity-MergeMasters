@@ -34,7 +34,7 @@ public class Unit : MonoBehaviour
         _nextAttack = _unitAttackDelay;
     }
 
-    void InitStats()
+    protected void InitStats()
     {
         this.unitMaxHealth = 100;
         this.unitHealth = this.unitMaxHealth;
@@ -48,7 +48,7 @@ public class Unit : MonoBehaviour
         this.name = this.unitName;
     }
 
-    void InitLevelColors()
+    protected void InitLevelColors()
     {
         levelColors[0] = Color.white;
         levelColors[1] = Color.yellow;

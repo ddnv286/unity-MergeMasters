@@ -912,7 +912,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2097264983}
-        m_MethodName: Spawn
+        m_MethodName: SpawnRanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1042,7 +1042,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2097264983}
-        m_MethodName: Spawn
+        m_MethodName: SpawnMelee
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1256,7 +1256,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Spawn Ranged Unit
+  m_Text: 'Spawn Ranged: 2000'
 --- !u!222 &812623337
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1338,7 +1338,7 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.54509807, g: 0.29411766, b: 0.10980393, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1559,7 +1559,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Spawn Melee Unit
+  m_Text: 'Spawn Melee: 3000'
 --- !u!222 &1193939499
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2266,6 +2266,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldAmount: 0
   goldDisplay: {fileID: 178755812}
+  meleeCostDisplay: {fileID: 1193939498}
+  rangedCostDisplay: {fileID: 812623336}
   selectedUnit: {fileID: 0}
   spawnedUnit: {fileID: 1749541274466711850, guid: fc7e1220842582048aea5f35b446260b,
     type: 3}

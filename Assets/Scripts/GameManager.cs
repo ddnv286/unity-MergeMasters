@@ -5,8 +5,12 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public int goldAmount = 0;
+    public int goldAmount;
     public Text goldDisplay;
+    public Text meleeCostDisplay;
+    public Text rangedCostDisplay;
+    private int _meleeCost = 0;
+    private int _rangedCost = 0;
     public GameObject selectedUnit;
     public Transform spawnedUnit; // prefab to initiate
     public List<Unit> remainingEnemies = new List<Unit>(); // contains remaining enemies
@@ -24,10 +28,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        this.goldAmount = 10000;
         InitiateGridcell();
         UpdateUnitList();
         InitFormation();
-        this.goldDisplay.text = "Gold: " + goldAmount;
+        UpdateCostDisplay();
+        UpdateGoldDisplay();
     }
 
     void Update()
@@ -86,14 +92,16 @@ public class GameManager : MonoBehaviour
         CheckWinCondition();
     }
 
-    public void InitFormation () {
+    public void InitFormation()
+    {
         // WIP
         this._formation = new Formation();
         this._formation.allies = new Unit[remainingAllies.Count];
-        this._formation.allyCoordinates = new Vector2Int [remainingAllies.Count];
-        for (int i = 0; i < remainingAllies.Count; i++) {
+        this._formation.allyCoordinates = new Vector2Int[remainingAllies.Count];
+        for (int i = 0; i < remainingAllies.Count; i++)
+        {
             this._formation.allies[i] = remainingAllies[i];
-            this._formation.allyCoordinates[i] = new Vector2Int(Mathf.RoundToInt(remainingAllies[i].transform.localPosition.x),Mathf.RoundToInt(remainingAllies[i].transform.localPosition.z));
+            this._formation.allyCoordinates[i] = new Vector2Int(Mathf.RoundToInt(remainingAllies[i].transform.localPosition.x), Mathf.RoundToInt(remainingAllies[i].transform.localPosition.z));
         }
         Debug.Log("Formation initiated.");
     }
@@ -182,7 +190,33 @@ public class GameManager : MonoBehaviour
         unit.gameObject.layer = 0;
     }
 
-    public void Spawn()
+    void UpdateCostDisplay()
+    {
+        this.meleeCostDisplay.text = "Spawn Melee: " + _meleeCost;
+        this.rangedCostDisplay.text = "Spawn Ranged: " + _rangedCost;
+    }
+
+    public void SpawnMelee()
+    {
+        if (goldAmount >= _meleeCost)
+        {
+            goldAmount -= _meleeCost;
+            _meleeCost += 3000;
+            Spawn("Melee");
+        }
+    }
+
+    public void SpawnRanged()
+    {
+        if (goldAmount >= _rangedCost)
+        {
+            goldAmount -= _rangedCost;
+            _rangedCost += 2000;
+            Spawn("Ranged");
+        }
+    }
+
+    public void Spawn(string type)
     {
         for (int i = 0; i < _gridWidth; i++)
         {
@@ -190,19 +224,41 @@ public class GameManager : MonoBehaviour
             {
                 if (!this.grid[i, j].GetComponent<GridCell>().isOccupied)
                 {
-                    Transform unit = Instantiate(spawnedUnit, _allySide);
-                    unit.transform.localPosition = new Vector3(i, 0, j);
-                    unit.transform.localScale = Vector3.one * .75f;
-                    unit.name = "Unit" + i + j;
-                    ToggleOccupied(i, j);
-                    return;
+                    if (type == "Melee")
+                    {
+                        Transform unit = Instantiate(spawnedUnit, _allySide);
+                        unit.transform.localPosition = new Vector3(i, 0, j);
+                        unit.transform.localScale = Vector3.one * .75f;
+                        unit.name = "Melee Unit" + i + j;
+                        ToggleOccupied(i, j);
+                        UpdateGoldDisplay();
+                        UpdateCostDisplay();
+                        return;
+                    }
+                    else if (type == "Ranged")
+                    {
+                        Transform unit = Instantiate(spawnedUnit, _allySide);
+                        unit.transform.localPosition = new Vector3(i, 0, j);
+                        unit.transform.localScale = Vector3.one * .75f;
+                        unit.name = "Ranged Unit" + i + j;
+                        ToggleOccupied(i, j);
+                        UpdateGoldDisplay();
+                        UpdateCostDisplay();
+                        return;
+                    }
                 }
             }
         }
     }
 
-    public void AddGold (int amount) {
+    public void AddGold(int amount)
+    {
         this.goldAmount += amount;
+        this.goldDisplay.text = "Gold: " + goldAmount;
+    }
+
+    public void UpdateGoldDisplay()
+    {
         this.goldDisplay.text = "Gold: " + goldAmount;
     }
 
@@ -281,7 +337,8 @@ public class GameManager : MonoBehaviour
     }
 }
 
-public class Formation {
+public class Formation
+{
     public Unit[] allies;
     public Vector2Int[] allyCoordinates;
 }
