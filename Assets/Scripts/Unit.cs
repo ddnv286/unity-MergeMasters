@@ -90,8 +90,6 @@ public class Unit : MonoBehaviour
     {
         if (this.currentStatus == Status.Moving)
         {
-            this.unitSpeed = 1f;
-            this.unitRange = 3f;
             {
                 if (Vector3.Distance(this.transform.position, _target.transform.position) > this.unitRange)
                 {
