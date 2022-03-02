@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour
     public float nextAttack;
     public int level = 0;
     public bool isEnemy = false;
-    public Color currentLevel;
+    public Color currentLevelColor;
     public Color[] levelColors = new Color[7];
     public enum Status { Idle, Moving, Attacking, Dead };
     public Status currentStatus = Status.Idle;
@@ -42,6 +42,10 @@ public class Unit : MonoBehaviour
         this.healthbar.SetHealth(this.unitHealth);
         this.unitDefense = 5;
         this.unitAttack = 10;
+        this.unitRange = 1;
+        this.unitSpeed = 1;
+        this.unitName = "Level " + this.level + " Unit";
+        this.name = this.unitName;
     }
 
     void InitLevelColors()
@@ -64,9 +68,16 @@ public class Unit : MonoBehaviour
         if (this.level + 1 < levelColors.Length)
         {
             this.level++;
-            this.unitName = levelColors[this.level].ToString() + " Cube Unit";
-            this.currentLevel = levelColors[this.level];
-            this.GetComponent<Renderer>().material.DOColor(this.GetComponent<Unit>().currentLevel, .25f);
+            this.unitName = "Level " + this.level + " Cube Unit";
+            this.name = this.unitName;
+            this.unitAttack += 5 * this.level;
+            this.unitMaxHealth += 10 * this.level;
+            this.unitHealth = this.unitMaxHealth;
+            this.unitDefense += 2 * this.level;
+            this.unitSpeed += .05f * this.level;
+            this.unitRange += .2f * this.level;
+            this.currentLevelColor = levelColors[this.level];
+            this.GetComponent<Renderer>().material.DOColor(this.GetComponent<Unit>().currentLevelColor, .25f);
         }
         else
         {
