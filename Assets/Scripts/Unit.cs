@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Collections;
 
 public class Unit : MonoBehaviour
 {
@@ -78,13 +80,12 @@ public class Unit : MonoBehaviour
         if (this.currentStatus == Status.Moving)
         {
             this.unitSpeed = 1f;
-            this.unitRange = 5f;
+            this.unitRange = 3f;
             {
                 if (Vector3.Distance(this.transform.position, _target.transform.position) > this.unitRange)
                 {
                     // keep moving until the target is in range
                     this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _target.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
-                    this.healthbar.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, _target.gameObject.transform.position, this.unitSpeed * Time.deltaTime);
                 }
                 else
                 {
@@ -116,8 +117,9 @@ public class Unit : MonoBehaviour
         this.currentStatus = Status.Moving;
     }
 
-    public void TakeDamage(int damage)
+    public IEnumerator TakeDamage(int damage)
     {
+        yield return new WaitForSeconds(.8f);
         // if unit defense is higher than damage, unit will not take damage
         this.unitHealth -= damage - unitDefense > 0 ? damage - unitDefense : 0;
         this.healthbar.SetHealth(this.unitHealth);
@@ -146,7 +148,7 @@ public class Unit : MonoBehaviour
                     {
                         this.currentStatus = Status.Attacking;
                         ShootProjectile(target);
-                        target.TakeDamage(this.unitAttack);
+                        StartCoroutine(target.TakeDamage(this.unitAttack));
                         break;
                     }
             }
@@ -157,11 +159,20 @@ public class Unit : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Projectile")
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
     private void ShootProjectile(Unit target)
     {
         // 3 ways to shoot a projectile: using transform, using collider, using raycast (raycast is like instant projectile)
-        // instantiate prefab, then shoot the prefab to the target
-        var projectile = Instantiate(pfProjectile, this.transform.position + Vector3.forward * .7f, transform.rotation);
-        projectile.GetComponent<Projectile>().Setup((target.transform.position - this.transform.position).normalized);
+        GameObject projectile = Instantiate(pfProjectile, this.transform.position + Vector3.forward * .75f, Quaternion.identity);
+        projectile.transform.LookAt(target.transform);
+        projectile.transform.DOMove(target.transform.position, .8f);
+        // rb.AddForce(target.transform.localPosition * 100f, ForceMode.Impulse);
     }
 }
