@@ -43,3 +43,8 @@ Convert mouse position to unity position then field game coordinate int(x, z)
 * If there is no enemy left, change the status to Idle.
 * If the unit's health is reduced to 0, change the status to Dead.
 * In case the target unit is changed to Status.Dead before an ally reach the target, either change the ally unit status to Idle or find NearestTarget(ally)
+
+-- Currency --
+* Gain gold by target's max HP on hit
+* Melee unit cost 3x more gold after each purchase
+* Ranged unit cost 2x more gold after each purchase
