@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
-using System.Collections.Generic;
 using System.Collections;
 
 public class Unit : MonoBehaviour
@@ -14,8 +12,8 @@ public class Unit : MonoBehaviour
     public int unitDefense;
     public float unitSpeed;
     public float unitRange;
-    public float unitAttackDelay = 1.5f;
-    public float nextAttack;
+    private float _unitAttackDelay = 1.5f;
+    private float _nextAttack;
     public int level = 0;
     public bool isEnemy = false;
     public Color currentLevelColor;
@@ -25,13 +23,15 @@ public class Unit : MonoBehaviour
     public Vector3 lastPosition;
     public GameObject pfProjectile; // arrow
     private Unit _target;
-    public Healthbar healthbar;
+    public Healthbar healthbar;    
+    private GameManager _manager;
 
     private void Awake()
     {
+        _manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         InitStats();
         InitLevelColors();
-        nextAttack = unitAttackDelay;
+        _nextAttack = _unitAttackDelay;
     }
 
     void InitStats()
@@ -106,16 +106,16 @@ public class Unit : MonoBehaviour
         if (this.currentStatus == Status.Attacking)
         {
             // processing attack delay here
-            if (nextAttack > 0)
+            if (_nextAttack > 0)
             {
-                nextAttack -= Time.deltaTime;
+                _nextAttack -= Time.deltaTime;
             }
-            else if (nextAttack <= 0)
+            else if (_nextAttack <= 0)
             {
                 this.currentStatus = Status.Attacking;
                 Debug.Log(_target.name + "'s remaining HP: " + _target.unitHealth);
                 Attack(_target);
-                nextAttack = unitAttackDelay;
+                _nextAttack = _unitAttackDelay;
             }
         }
     }
@@ -170,6 +170,8 @@ public class Unit : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        // this doesn't work for some reason
+        // both unit and projectile have box collider, unit has triggered rigidbody (?)
         if (collision.gameObject.tag == "Projectile")
         {
             Destroy(collision.gameObject);
@@ -180,8 +182,9 @@ public class Unit : MonoBehaviour
     {
         // 3 ways to shoot a projectile: using transform, using collider, using raycast (raycast is like instant projectile)
         GameObject projectile = Instantiate(pfProjectile, this.transform.position + Vector3.forward * .75f, Quaternion.identity);
+        // rotate the projectile to make it always facing the target
         projectile.transform.LookAt(target.transform);
         projectile.transform.DOMove(target.transform.position, .8f);
-        // rb.AddForce(target.transform.localPosition * 100f, ForceMode.Impulse);
+        _manager.AddGold(target.unitMaxHealth);
     }
 }

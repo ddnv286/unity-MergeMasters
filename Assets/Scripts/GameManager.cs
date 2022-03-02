@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+    public int goldAmount = 0;
+    public Text goldDisplay;
     public GameObject selectedUnit;
     public Transform spawnedUnit; // prefab to initiate
     public List<Unit> remainingEnemies = new List<Unit>(); // contains remaining enemies
@@ -16,13 +19,15 @@ public class GameManager : MonoBehaviour
     public Transform prefabGridCell;
     [SerializeField] Transform _grid;
     public GridCell[,] grid = new GridCell[5, 3];
-    [SerializeField] Formation formation;
+    [SerializeField] Formation _formation;
 
     private void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
         InitiateGridcell();
         UpdateUnitList();
         InitFormation();
+        this.goldDisplay.text = "Gold: " + goldAmount;
     }
 
     void Update()
@@ -83,12 +88,12 @@ public class GameManager : MonoBehaviour
 
     public void InitFormation () {
         // WIP
-        this.formation = new Formation();
-        this.formation.allies = new Unit[remainingAllies.Count];
-        this.formation.allyCoordinates = new Vector2Int [remainingAllies.Count];
+        this._formation = new Formation();
+        this._formation.allies = new Unit[remainingAllies.Count];
+        this._formation.allyCoordinates = new Vector2Int [remainingAllies.Count];
         for (int i = 0; i < remainingAllies.Count; i++) {
-            this.formation.allies[i] = remainingAllies[i];
-            this.formation.allyCoordinates[i] = new Vector2Int(Mathf.RoundToInt(remainingAllies[i].transform.localPosition.x),Mathf.RoundToInt(remainingAllies[i].transform.localPosition.z));
+            this._formation.allies[i] = remainingAllies[i];
+            this._formation.allyCoordinates[i] = new Vector2Int(Mathf.RoundToInt(remainingAllies[i].transform.localPosition.x),Mathf.RoundToInt(remainingAllies[i].transform.localPosition.z));
         }
         Debug.Log("Formation initiated.");
     }
@@ -196,6 +201,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void AddGold (int amount) {
+        this.goldAmount += amount;
+        this.goldDisplay.text = "Gold: " + goldAmount;
+    }
+
     void ToggleOccupied(float x, float z)
     {
         grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z)].isOccupied = !grid[Mathf.RoundToInt(x), Mathf.RoundToInt(z)].isOccupied;
@@ -219,7 +229,7 @@ public class GameManager : MonoBehaviour
             // hide the gridlines when Move button is pressed.
             _grid.transform.DOScale(0, 0);
             foreach (Unit ally in remainingAllies)
-            {                
+            {
                 Unit nearest = NearestEnemy(ally);
                 ally.MoveToTarget(nearest);
             }
