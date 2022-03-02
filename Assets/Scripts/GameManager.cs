@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public int goldAmount;
+    public float goldAmount;
     public Text goldDisplay;
     public Text meleeCostDisplay;
     public Text rangedCostDisplay;
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-        this.goldAmount = 10000;
+        this.goldAmount = Mathf.Infinity;
         InitiateGridcell();
         UpdateUnitList();
         InitFormation();
