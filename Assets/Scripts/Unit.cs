@@ -23,10 +23,10 @@ public class Unit : MonoBehaviour
     public Vector3 lastPosition;
     public GameObject pfProjectile; // arrow
     private Unit _target;
-    public Healthbar healthbar;    
+    public Healthbar healthbar;
     private GameManager _manager;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         InitStats();
@@ -38,14 +38,14 @@ public class Unit : MonoBehaviour
     {
         this.unitMaxHealth = 100;
         this.unitHealth = this.unitMaxHealth;
-        this.healthbar.SetMaxHealth(this.unitMaxHealth);
-        this.healthbar.SetHealth(this.unitHealth);
         this.unitDefense = 5;
         this.unitAttack = 10;
         this.unitRange = 1;
         this.unitSpeed = 1;
         this.unitName = "Level " + this.level + " Unit";
-        this.name = this.unitName;
+        //this.name = this.unitName;
+        this.healthbar.SetMaxHealth(this.unitMaxHealth);
+        this.healthbar.SetHealth(this.unitHealth);
     }
 
     protected void InitLevelColors()
@@ -168,7 +168,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         // this doesn't work for some reason
         // both unit and projectile have box collider, unit has triggered rigidbody (?)
@@ -178,7 +178,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void ShootProjectile(Unit target)
+    public void ShootProjectile(Unit target)
     {
         // 3 ways to shoot a projectile: using transform, using collider, using raycast (raycast is like instant projectile)
         GameObject projectile = Instantiate(pfProjectile, this.transform.position + Vector3.forward * .75f, Quaternion.identity);

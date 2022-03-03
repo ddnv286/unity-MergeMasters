@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedUnit : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
+public class RangedUnit : Unit
+{   
+    protected override void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.Awake();
+        for (int i = 0; i < this.levelColors.Length; i++) {
+            this.levelColors[i].a = 1f;
+        }
+        this.unitRange = 5;
     }
 }

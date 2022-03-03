@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class MeleeUnit : Unit
 {
-    // Start is called before the first frame update
-    void Awake ()
+    protected override void Awake()
     {
-        base.InitStats();
-        base.InitLevelColors();
+        base.Awake();
         for (int i = 0; i < this.levelColors.Length; i++) {
-            this.levelColors[i].a = 1;
+            this.levelColors[i].a = .65f;
         }
         this.unitRange = 1;
     }

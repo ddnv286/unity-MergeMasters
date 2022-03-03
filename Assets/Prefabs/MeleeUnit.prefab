@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1749541274466711850}
-  - component: {fileID: 1749541274466711854}
   - component: {fileID: 1749541274466711849}
   - component: {fileID: 1749541274466711848}
   - component: {fileID: 1749541274466711855}
+  - component: {fileID: 5209539492408763554}
   m_Layer: 0
-  m_Name: AllyUnit
-  m_TagString: Unit
+  m_Name: MeleeUnit
+  m_TagString: Melee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,43 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1749541274466711854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749541274466711853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd910d2048b4b8c4b966ee176810a80a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxLevel: 7
-  unitName: 
-  unitHealth: 100
-  unitMaxHealth: 100
-  unitAttack: 0
-  unitDefense: 0
-  unitSpeed: 0
-  unitRange: 0
-  level: 0
-  isEnemy: 0
-  currentLevelColor: {r: 0, g: 0, b: 0, a: 0}
-  levelColors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  currentStatus: 0
-  lastPosition: {x: 0, y: 0, z: 0}
-  pfProjectile: {fileID: 5594604302313985786, guid: b50458148d12b084b9213cda369fb12f,
-    type: 3}
-  healthbar: {fileID: 8929001876863031721}
-  gameManager: {fileID: 0}
 --- !u!33 &1749541274466711849
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -132,6 +95,42 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5209539492408763554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749541274466711853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def5158acdbd55741896aa3486266f8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLevel: 7
+  unitName: 
+  unitHealth: 0
+  unitMaxHealth: 0
+  unitAttack: 0
+  unitDefense: 0
+  unitSpeed: 0
+  unitRange: 0
+  level: 0
+  isEnemy: 0
+  currentLevelColor: {r: 0, g: 0, b: 0, a: 0}
+  levelColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  currentStatus: 0
+  lastPosition: {x: 0, y: 0, z: 0}
+  pfProjectile: {fileID: 5594604302313985786, guid: b50458148d12b084b9213cda369fb12f,
+    type: 3}
+  healthbar: {fileID: 8929001876863031721}
 --- !u!1 &4897796898102212050
 GameObject:
   m_ObjectHideFlags: 0

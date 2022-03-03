@@ -392,11 +392,9 @@ MonoBehaviour:
   unitDefense: 0
   unitSpeed: 0
   unitRange: 0
-  unitAttackDelay: 1.5
-  nextAttack: 0
   level: 0
   isEnemy: 1
-  currentLevel: {r: 0, g: 0, b: 0, a: 0}
+  currentLevelColor: {r: 0, g: 0, b: 0, a: 0}
   levelColors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}

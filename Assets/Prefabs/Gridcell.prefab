@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 3940290902888303207}
   m_Layer: 0
   m_Name: Gridcell
-  m_TagString: Untagged
+  m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,7 +119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7946065821687544958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.38461536}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2353278039657752551}
@@ -138,3 +138,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd2b365c87e6f54cb09d352a59c2476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupiedUnit: {fileID: 0}

@@ -4,9 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Unit
   - Enemy
   - Projectile
+  - Melee
+  - Ranged
+  - Cell
   layers:
   - Default
   - TransparentFX

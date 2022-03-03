@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     private int _meleeCost = 0;
     private int _rangedCost = 0;
     public GameObject selectedUnit;
-    public Transform spawnedUnit; // prefab to initiate
+    public Transform meleeUnit; // melee prefab to initiate
+    public Transform rangedUnit; // ranged prefab to initiate
     public List<Unit> remainingEnemies = new List<Unit>(); // contains remaining enemies
     public List<Unit> remainingAllies = new List<Unit>(); // contains remaining allies
     public GameObject raycastedObject; // check if selectedUnit is overlapped with raycastedObject
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-        this.goldAmount = Mathf.Infinity;
+        this.goldAmount = 100000; //Mathf.Infinity;
         InitiateGridcell();
         UpdateUnitList();
         InitFormation();
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (!hit.collider.CompareTag("Unit"))
+                    if (!(hit.collider.CompareTag("Melee") || hit.collider.CompareTag("Ranged")))
                     {
                         return;
                     }
@@ -141,7 +142,7 @@ public class GameManager : MonoBehaviour
                 {
                     foreach (var hitCollider in hitColliders)
                     {
-                        if (hitCollider.CompareTag("Unit"))
+                        if (hitCollider.CompareTag("Melee") || hitCollider.CompareTag("Ranged"))
                         {
                             // Debug.Log(grid[x, z] + " is occupied");
                             grid[x, z].isOccupied = true;
@@ -162,7 +163,8 @@ public class GameManager : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider.tag.Equals("Unit") && unit.GetComponent<Unit>().level == hit.collider.GetComponent<Unit>().level)
+            // same type and level
+            if (hit.collider.tag.Equals(unit.tag) && unit.GetComponent<Unit>().level == hit.collider.GetComponent<Unit>().level)
             {
                 // if there is other unit with same level in that position, log the name of the unit out then merge them into new unit
                 // move the selectedUnit back to it last position in case the level is maxed out
@@ -176,7 +178,13 @@ public class GameManager : MonoBehaviour
                     Merge(unit.gameObject, hit.collider.gameObject);
                 }
             }
-            else if (hit.collider.tag.Equals("Unit") && unit.GetComponent<Unit>().level != hit.collider.GetComponent<Unit>().level)
+            // same type but not the same level
+            else if ((hit.collider.tag.Equals(unit.tag) && unit.GetComponent<Unit>().level != hit.collider.GetComponent<Unit>().level))
+            {
+                unit.transform.DOLocalMove(unit.GetComponent<Unit>().lastPosition, .25f);
+            }
+            // different type, but hit object must not be cell
+            else if (!hit.collider.tag.Equals("Untagged") && !hit.collider.tag.Equals(unit.tag))
             {
                 unit.transform.DOLocalMove(unit.GetComponent<Unit>().lastPosition, .25f);
             }
@@ -226,7 +234,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (type == "Melee")
                     {
-                        Transform unit = Instantiate(spawnedUnit, _allySide);
+                        Transform unit = Instantiate(meleeUnit, _allySide);
                         unit.transform.localPosition = new Vector3(i, 0, j);
                         unit.transform.localScale = Vector3.one * .75f;
                         unit.name = "Melee Unit" + i + j;
@@ -237,7 +245,7 @@ public class GameManager : MonoBehaviour
                     }
                     else if (type == "Ranged")
                     {
-                        Transform unit = Instantiate(spawnedUnit, _allySide);
+                        Transform unit = Instantiate(rangedUnit, _allySide);
                         unit.transform.localPosition = new Vector3(i, 0, j);
                         unit.transform.localScale = Vector3.one * .75f;
                         unit.name = "Ranged Unit" + i + j;
@@ -278,7 +286,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Level up: " + unit1.GetComponent<Unit>().level);
     }
 
-    public void Move()
+    public void Attack()
     {
         if (remainingAllies.Count != 0)
         {
