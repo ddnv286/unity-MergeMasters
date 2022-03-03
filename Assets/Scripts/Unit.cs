@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
@@ -88,6 +88,9 @@ public class Unit : MonoBehaviour
 
     public void Update()
     {
+        if (_target == null) {
+            _manager.Attack();
+        }
         if (this.currentStatus == Status.Moving)
         {
             {
