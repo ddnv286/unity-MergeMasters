@@ -88,9 +88,10 @@ public class Unit : MonoBehaviour
 
     public void Update()
     {
-        if (_target == null) {
-            _manager.Attack();
-        }
+        // check in combat state (WIP)
+        // if (_target == null) {
+        //     _manager.Attack();
+        // }
         if (this.currentStatus == Status.Moving)
         {
             {
@@ -167,6 +168,7 @@ public class Unit : MonoBehaviour
         }
         else
         {
+            // change to Idle after the target dead or inactive
             this.currentStatus = Status.Idle;
         }
     }
