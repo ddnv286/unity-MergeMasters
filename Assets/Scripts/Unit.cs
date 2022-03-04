@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
@@ -24,7 +24,7 @@ public class Unit : MonoBehaviour
     public GameObject pfProjectile; // arrow
     private Unit _target;
     public Healthbar healthbar;
-    private GameManager _manager;
+    protected GameManager _manager;
 
     protected virtual void Awake()
     {
@@ -75,7 +75,7 @@ public class Unit : MonoBehaviour
             this.unitHealth = this.unitMaxHealth;
             this.unitDefense += 2 * this.level;
             this.unitSpeed += .05f * this.level;
-            this.unitRange += .2f * this.level;
+            // this.unitRange += .2f * this.level;
             this.currentLevelColor = levelColors[this.level];
             this.GetComponent<Renderer>().material.DOColor(this.GetComponent<Unit>().currentLevelColor, .25f);
         }
@@ -88,10 +88,6 @@ public class Unit : MonoBehaviour
 
     public void Update()
     {
-        // check in combat state (WIP)
-        // if (_target == null) {
-        //     _manager.Attack();
-        // }
         if (this.currentStatus == Status.Moving)
         {
             {
@@ -144,7 +140,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void Attack(Unit target)
+    protected virtual void Attack(Unit target)
     {
         if (target.gameObject.activeSelf)
         {
@@ -160,15 +156,19 @@ public class Unit : MonoBehaviour
                 case Status.Attacking:
                     {
                         this.currentStatus = Status.Attacking;
-                        ShootProjectile(target);
+                        // ShootProjectile(target);
                         StartCoroutine(target.TakeDamage(this.unitAttack));
                         break;
                     }
             }
         }
+        else if (_manager.remainingEnemies.Count != 0)
+        {
+            Unit nearest = _manager.NearestEnemy(this);
+            MoveToTarget(nearest);
+        }
         else
         {
-            // change to Idle after the target dead or inactive
             this.currentStatus = Status.Idle;
         }
     }
@@ -190,6 +190,10 @@ public class Unit : MonoBehaviour
         // rotate the projectile to make it always facing the target
         projectile.transform.LookAt(target.transform);
         projectile.transform.DOMove(target.transform.position, .8f);
-        _manager.AddGold(target.unitMaxHealth);
+        // only add gold on enemy hit, not ally hit
+        if (target.isEnemy)
+        {
+            _manager.AddGold(target.unitMaxHealth);
+        }
     }
 }

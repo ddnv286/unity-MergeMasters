@@ -32,9 +32,22 @@ public class GameManager : MonoBehaviour
         this.goldAmount = 100000; //Mathf.Infinity;
         InitiateGridcell();
         UpdateUnitList();
-        InitFormation();
+        //InitFormation();
         UpdateCostDisplay();
         UpdateGoldDisplay();
+    }
+
+    // rearrange ally units to their saved location
+    void LoadFormation()
+    {
+        if (_formation != null)
+        {
+            for (int i = 0; i < _formation.allies.Length; i++)
+            {
+                _formation.allies[i].transform.DOLocalMove(new Vector3(_formation.allyCoordinates[i].x, 0, _formation.allyCoordinates[i].y), 0f);
+                _formation.allies[i].currentStatus = Unit.Status.Idle;
+            }
+        }
     }
 
     void Update()
@@ -288,6 +301,7 @@ public class GameManager : MonoBehaviour
 
     public void Attack()
     {
+        InitFormation();
         if (remainingAllies.Count != 0)
         {
             // hide the gridlines when Move button is pressed.
@@ -296,6 +310,11 @@ public class GameManager : MonoBehaviour
             {
                 Unit nearest = NearestEnemy(ally);
                 ally.MoveToTarget(nearest);
+            }
+            foreach (Unit enemy in remainingEnemies)
+            {
+                Unit nearest = NearestEnemy(enemy);
+                enemy.MoveToTarget(nearest);
             }
         }
     }
@@ -324,13 +343,28 @@ public class GameManager : MonoBehaviour
     {
         Unit nearestEnemy = null;
         float minDistance = Mathf.Infinity;
-        foreach (Unit enemy in remainingEnemies)
+        if (!unit.isEnemy)
         {
-            float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
-            if (distance < minDistance)
+            foreach (Unit enemy in remainingEnemies)
             {
-                minDistance = distance;
-                nearestEnemy = enemy;
+                float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = enemy;
+                }
+            }
+        }
+        else
+        {
+            foreach (Unit enemy in remainingAllies)
+            {
+                float distance = Vector3.Distance(unit.transform.position, enemy.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = enemy;
+                }
             }
         }
         return nearestEnemy;
@@ -342,6 +376,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("All enemies defeated");
         }
+        else if (remainingAllies.Count == 0)
+        {
+            Debug.Log("All allies defeated");
+        }
+        LoadFormation();
     }
 }
 

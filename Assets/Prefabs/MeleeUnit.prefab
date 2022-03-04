@@ -128,8 +128,7 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 0, a: 0}
   currentStatus: 0
   lastPosition: {x: 0, y: 0, z: 0}
-  pfProjectile: {fileID: 5594604302313985786, guid: b50458148d12b084b9213cda369fb12f,
-    type: 3}
+  pfProjectile: {fileID: 0}
   healthbar: {fileID: 8929001876863031721}
 --- !u!1 &4897796898102212050
 GameObject:
@@ -440,7 +439,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &7349170028365290923
 MonoBehaviour:
