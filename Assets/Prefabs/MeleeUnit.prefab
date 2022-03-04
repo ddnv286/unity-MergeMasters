@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: eb47009ab5d348a4dbb8856a9f0a5fa1, type: 2}
+  - {fileID: 2100000, guid: f5f1079182f704c4bb5ef4e17442c27c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,6 +129,8 @@ MonoBehaviour:
   currentStatus: 0
   lastPosition: {x: 0, y: 0, z: 0}
   pfProjectile: {fileID: 0}
+  floatingText: {fileID: 405581591122233468, guid: 4fcee7865f1e9cd4bb2ab542009733dc,
+    type: 3}
   healthbar: {fileID: 8929001876863031721}
 --- !u!1 &4897796898102212050
 GameObject:

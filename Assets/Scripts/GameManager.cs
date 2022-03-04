@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public Transform prefabGridCell;
     [SerializeField] Transform _grid;
     public GridCell[,] grid = new GridCell[5, 3];
-    [SerializeField] Formation _formation;
+    [SerializeField] Formation _formation;    
 
     private void Awake()
     {
@@ -321,7 +321,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateUnitList()
     {
-        // prevent adding both list to infinity
+        // prevent both list from being added to infinity
         remainingAllies.Clear();
         remainingEnemies.Clear();
         Unit[] allUnits = GameObject.FindObjectsOfType<Unit>();
@@ -375,12 +375,13 @@ public class GameManager : MonoBehaviour
         if (remainingEnemies.Count == 0)
         {
             Debug.Log("All enemies defeated");
+            LoadFormation();
         }
         else if (remainingAllies.Count == 0)
         {
             Debug.Log("All allies defeated");
-        }
-        LoadFormation();
+            LoadFormation();
+        }        
     }
 }
 

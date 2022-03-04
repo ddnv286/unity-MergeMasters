@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using TMPro;
 
 public class Unit : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Unit : MonoBehaviour
     public Status currentStatus = Status.Idle;
     public Vector3 lastPosition;
     public GameObject pfProjectile; // arrow
+    public GameObject floatingText;
     private Unit _target;
     public Healthbar healthbar;
     protected GameManager _manager;
@@ -132,6 +134,16 @@ public class Unit : MonoBehaviour
         // if unit defense is higher than damage, unit will not take damage
         this.unitHealth -= damage - unitDefense > 0 ? damage - unitDefense : 0;
         this.healthbar.SetHealth(this.unitHealth);
+        // only add gold on enemy hit, not ally hit
+        if (this.isEnemy)
+        {
+            _manager.AddGold(this.unitMaxHealth);
+            var _floatingText = Instantiate(floatingText, this.transform);
+            _floatingText.GetComponent<TextMeshPro>().SetText("+" + this.unitMaxHealth);
+            _floatingText.transform.DOMoveY(this.transform.position.y + .5f, 1f);
+            _floatingText.transform.DOScale(0, .5f);
+            Destroy(_floatingText, 1f);
+        }
         if (this.unitHealth <= 0)
         {
             this.gameObject.transform.DOScale(0, .5f);
@@ -190,10 +202,5 @@ public class Unit : MonoBehaviour
         // rotate the projectile to make it always facing the target
         projectile.transform.LookAt(target.transform);
         projectile.transform.DOMove(target.transform.position, .8f);
-        // only add gold on enemy hit, not ally hit
-        if (target.isEnemy)
-        {
-            _manager.AddGold(target.unitMaxHealth);
-        }
     }
 }

@@ -407,6 +407,8 @@ MonoBehaviour:
   lastPosition: {x: 0, y: 0, z: 0}
   pfProjectile: {fileID: 5594604302313985786, guid: b50458148d12b084b9213cda369fb12f,
     type: 3}
+  floatingText: {fileID: 405581591122233468, guid: 4fcee7865f1e9cd4bb2ab542009733dc,
+    type: 3}
   healthbar: {fileID: 5852238286485424733}
 --- !u!54 &7980127302144755452
 Rigidbody:

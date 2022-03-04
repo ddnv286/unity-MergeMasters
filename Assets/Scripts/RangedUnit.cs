@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class RangedUnit : Unit
-{   
+{
     protected override void Awake()
     {
         base.Awake();
-        for (int i = 0; i < this.levelColors.Length; i++) {
+        for (int i = 0; i < this.levelColors.Length; i++)
+        {
             this.levelColors[i].a = 1f;
         }
         this.unitRange = 5;
