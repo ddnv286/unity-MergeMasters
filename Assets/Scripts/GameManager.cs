@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
             {
                 _formation.allies[i].transform.DOLocalMove(new Vector3(_formation.allyCoordinates[i].x, 0, _formation.allyCoordinates[i].y), 0f);
                 _formation.allies[i].currentStatus = Unit.Status.Idle;
+                _formation.allies[i].unitHealth = _formation.allies[i].unitMaxHealth;
             }
         }
     }
@@ -150,7 +151,7 @@ public class GameManager : MonoBehaviour
             {
                 // .25f is chosen abitrarily
                 Vector3 pos = grid[x, z].transform.position;
-                var hitColliders = Physics.OverlapSphere(grid[x, z].gameObject.transform.position, .25f);
+                var hitColliders = Physics.OverlapSphere(grid[x, z].gameObject.transform.position, .5f);
                 if (hitColliders.Length > 0)
                 {
                     foreach (var hitCollider in hitColliders)

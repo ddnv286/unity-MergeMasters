@@ -19,6 +19,7 @@ public class Unit : MonoBehaviour
     public bool isEnemy = false;
     public Color currentLevelColor;
     public Color[] levelColors = new Color[7];
+    public Transform[] unitUpgrades = new Transform[7];
     public enum Status { Idle, Moving, Attacking, Dead };
     public Status currentStatus = Status.Idle;
     public Vector3 lastPosition;
@@ -78,6 +79,7 @@ public class Unit : MonoBehaviour
             this.unitDefense += 2 * this.level;
             this.unitSpeed += .05f * this.level;
             // this.unitRange += .2f * this.level;
+            // TODO: instead of changing material color based on level, instantiate new unit prefab based on level
             this.currentLevelColor = levelColors[this.level];
             this.GetComponent<Renderer>().material.DOColor(this.GetComponent<Unit>().currentLevelColor, .25f);
         }
@@ -140,13 +142,15 @@ public class Unit : MonoBehaviour
             _manager.AddGold(this.unitMaxHealth);
             var _floatingText = Instantiate(floatingText, this.transform);
             _floatingText.GetComponent<TextMeshPro>().SetText("+" + this.unitMaxHealth);
-            _floatingText.transform.DOMoveY(this.transform.position.y + .5f, 1f);
-            _floatingText.transform.DOScale(0, .5f);
+            _floatingText.GetComponent<TextMeshPro>().transform.Rotate(Vector3.up*-180);
+            // TODO: calculating max height based on bounds, then set text to desired height before applying animation
+            _floatingText.transform.position = new Vector3(_floatingText.transform.position.x, 1f, _floatingText.transform.position.z);
+            _floatingText.transform.DOMoveY(1.5f, .5f);
+            _floatingText.GetComponent<TextMeshPro>().DOFade(0, .5f);
             Destroy(_floatingText, 1f);
         }
         if (this.unitHealth <= 0)
         {
-            this.gameObject.transform.DOScale(0, .5f);
             this.currentStatus = Status.Dead;
             this.gameObject.SetActive(false);
         }
